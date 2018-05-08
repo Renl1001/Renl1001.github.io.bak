@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'ZOJ 4027 Sequence Swapping(dp)'
+title: '[dp]ZOJ 4027 Sequence Swapping(2018浙江省赛-D题)'
 date: 2018-05-07
 author: Renl1001
 tags: dp
