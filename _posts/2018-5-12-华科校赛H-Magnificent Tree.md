@@ -3,7 +3,7 @@ layout: post
 title: '[cdq分治]华科校赛H-Magnificent Tree'
 date: 2018-05-08
 author: Renl1001
-tags: 线段树
+tags: cdq分治
 ---
 
 ## 题意
