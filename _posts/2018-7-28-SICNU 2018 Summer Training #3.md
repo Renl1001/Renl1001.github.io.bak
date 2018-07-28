@@ -181,5 +181,76 @@ int main()
     return 0;
 }
 
+```
+
+## D题
+### 题目大意
+[题目链接](https://vjudge.net/contest/238810#problem/D)
+
+给一颗树，每次删除节点编号最小的叶子，然后记录删除的叶子的邻接节点。通过记录的节点来计算树的邻接表
+
+### 分析
+可以通过每条记录，得到每个节点的邻接节点个数，用d[i]保存，然后遍历每条记录，从d[i]==1中找到编号最小的节点j，删除该节点（d[i]--,d[j]--)，模拟一下就好了。
+
+可以通过优先队列来记录d[i]等于1的节点（代码里面写的0），注意输入格式
+
+### 代码
+
+```clike
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define clr(a, x) memset(a, x, sizeof(a))
+#define pb push_back
+#define mp make_pair
+#define INF 0x3f3f3f3f
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll MOD = 1e9+7;
+const int maxn = 7500 + 5;
+// head
+
+VI vi;
+int d[maxn];
+priority_queue<int, vector<int>, greater<int> > pq;
+std::vector<int> v[maxn];
+
+int main() 
+{
+#ifndef ONLINE_JUDGE
+    // freopen("in.txt", "r", stdin);
+#endif
+
+    int a;
+    while(~scanf("%d", &a))
+        vi.pb(a);
+    int n = vi.size()+1;
+    rep(i,0,vi.size())
+        d[vi[i]]++;   
+    rep(i, 1, n+1)    
+        if(d[i] == 0)
+            pq.push(i);
+    rep(i,0,vi.size())
+    {
+        int top = pq.top();
+        pq.pop();
+        v[vi[i]].pb(top);
+        v[top].pb(vi[i]);
+        d[vi[i]]--;
+        if(d[vi[i]] == 0)
+            pq.push(vi[i]);
+    }
+    rep(i,1,n+1)
+        sort(v[i].begin(), v[i].end());
+    rep(i,1,n+1)
+    {
+        printf("%d:", i);
+        rep(j,0,v[i].size())
+            printf(" %d", v[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
 
 ```
