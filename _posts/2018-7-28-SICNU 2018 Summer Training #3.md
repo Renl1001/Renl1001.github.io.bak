@@ -75,3 +75,111 @@ int main()
     return 0;
 }
 ```
+
+## C题
+### 题目大意
+[题目链接](https://vjudge.net/contest/238810#problem/C)
+
+有$n$个人,$m$个提交记录，每个提交上面记录了哪个人什么时候过了一道题，输出每个事件后，第一个人的排名
+
+排名先按照题数排序，相同的题数按照罚时排序，相同的罚时按照序号排序
+
+### 分析
+第1个人过题后，排名会上涨，其他人过题的时候，如果过题的那个人之前排名比第1个人低，过题后比第1个人高，那么排名会减一
+
+维护一个优先队列（优先弹出排名低的）来存比第一个人排名高的人。然后如果第一个人过题了，就依次和队列里面的数比较，如果排名比队列里面的人高，就出队。如果其他人过题了，过题前排名比第一个人低，过题后比第一人个排名高，排名--
+
+### 代码
+
+```clike
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define clr(a, x) memset(a, x, sizeof(a))
+#define pb push_back
+#define mp make_pair
+#define INF 0x3f3f3f3f
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll MOD = 1e9+7;
+const int maxn = 1e5 + 5;
+// head
+
+struct pp
+{
+    int num;
+    int second;
+    int ind;
+    bool operator <(const pp & a) const // pp a < pp b 表示a的排名比b的排名高（排名低的先出队）
+    {
+        if(num == a.num)
+            return second < a.second;
+        return num > a.num;
+    }
+};
+pp p[maxn];
+
+priority_queue<pp > pq;
+
+int main() 
+{
+#ifndef ONLINE_JUDGE
+    // freopen("in.txt", "r", stdin);
+#endif
+
+    int n, m;
+    cin >> n >> m;
+    int pm = 1;  //排名
+    rep(i,1,n+1)
+        p[i].ind = i;
+    while(m--)
+    {
+        int t, c;
+        scanf("%d%d", &t, &c);
+        if(t == 1)
+        {
+            p[t].num++;
+            p[t].second += c;
+            while(!pq.empty())
+            {
+                pp top = pq.top();
+                int ind = top.ind;
+                if(top.num != p[ind].num) // 第ind个人过题了，队列里面没更新，需要更新
+                {
+                    pq.pop();
+                    pq.push(p[ind]);
+                    continue;
+                }
+                if(top < p[1])
+                    break;
+                else
+                    pq.pop();
+            }
+            pm = pq.size()+1;
+        }
+        else
+        {
+            if(!(p[t] < p[1]))
+            {
+                p[t].num++;
+                p[t].second += c;
+                if(p[t] < p[1])
+                {
+                    pq.push(p[t]);
+                    pm++;
+                }
+            }
+            else
+            {
+                p[t].num++;
+                p[t].second += c;
+            }
+        }
+        printf("%d\n", pm);
+    }
+    return 0;
+}
+
+
+```
