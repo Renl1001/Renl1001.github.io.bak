@@ -415,3 +415,68 @@ int main()
     return 0;
 }
 ```
+
+## I题
+### 题目大意
+[题目链接](https://vjudge.net/contest/238810#problem/I)
+
+有编号为1...n的n个人，你有m个礼物可以给m个人，n个人是有关联的，当你把礼物给编号为c的人的时候，那么编号小于等于c的人都会成为你的追随者。求追随者个数的期望
+
+### 分析
+m个礼物送给最大编号的人的编号是i的个数有：$C_{i-1}^{m-1}$,所以可以得到期望的公式$$ ans = \frac{\sum_{i=m}^{n}i*{C_{i-1}^{m-1}}}{C_n^m} $$
+$$ \sum_{i=m}^{n}i*{C_{i-1}^{m-1}} $$
+$$ = \sum_{i=m}^{n}i*{\frac{(i-1)!}{(m-1)!(i-m)!}} $$
+$$ = \sum_{i=m}^{n}{\frac{i!}{(m-1)!(i-m)!}} $$
+$$ = m*\sum_{i=m}^{n}{\frac{i!}{m!(i-m)!}} $$
+$$ = m * \sum_{i=m}^{n}{C_i^m} $$
+$$ = m * (C_m^m+C_{m+1}^m+C_{m+2}^m+...+C_n^m) &&
+$$ = m * (C_{m+2}^{m+1}+C_{m+2}^m+...+C_n^m) $$
+$$ = m * C_{n+1}^{m+1} $$
+$$ = m * C_{n+1}^{m+1} $$
+
+$$ ans = \frac{m * C_{n+1}^{m+1}}{C_n^m} $$
+$$ = \frac{m*(n+1)}{m+1} $$
+
+> 辣鸡Windows测评机
+
+### 代码
+
+```clike
+#include <iostream>
+using namespace std;
+typedef long long ll;
+const ll MOD = 1e9+7;
+// head
+
+ll qpow(ll a, ll b)
+{
+    ll ret = 1;
+    while(b)
+    {
+        if(b & 1)
+            ret = ret * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
+    }
+    return ret;
+}
+
+ll inv(ll a)
+{
+    return qpow(a,MOD-2);
+}
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    int T;
+    cin >> T;
+    while(T--)
+    {
+        ll n, m;
+        cin >> n >> m;
+        cout << m*(n+1)%MOD*inv(m+1)%MOD << endl;
+    }
+    return 0;
+}
+```
