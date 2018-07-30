@@ -424,19 +424,28 @@ int main()
 
 ### 分析
 m个礼物送给最大编号的人的编号是i的个数有：$C_{i-1}^{m-1}$,所以可以得到期望的公式
-$$ ans = \frac{\sum_{i=m}^{n}i*{C_{i-1}^{m-1}}}{C_n^m} $$
-$$ \sum_{i=m}^{n}i*{C_{i-1}^{m-1}} \\
-= \sum_{i=m}^{n}i*{\frac{(i-1)!}{(m-1)!(i-m)!}} \\
-= \sum_{i=m}^{n}{\frac{i!}{(m-1)!(i-m)!}} \\
-= m*\sum_{i=m}^{n}{\frac{i!}{m!(i-m)!}} \\
-= m * \sum_{i=m}^{n}{C_i^m} \\
-= m * (C_m^m+C_{m+1}^m+C_{m+2}^m+...+C_n^m) \\
-= m * (C_{m+2}^{m+1}+C_{m+2}^m+...+C_n^m) \\
-= m * C_{n+1}^{m+1} \\
-= m * C_{n+1}^{m+1} $$
+$$ ans &= \frac{\sum_{i=m}^{n}i*{C_{i-1}^{m-1}}}{C_n^m} $$
 
-$$ ans = \frac{m * C_{n+1}^{m+1}}{C_n^m} \\
-= \frac{m*(n+1)}{m+1} $$
+$$
+\begin{align}
+\sum_{i=m}^{n}i*{C_{i-1}^{m-1}} &= \sum_{i=m}^{n}i*{\frac{(i-1)!}{(m-1)!(i-m)!}} \\
+&= \sum_{i=m}^{n}{\frac{i!}{(m-1)!(i-m)!}} \\
+&= m*\sum_{i=m}^{n}{\frac{i!}{m!(i-m)!}} \\
+&= m * \sum_{i=m}^{n}{C_i^m} \\
+&= m * (C_m^m+C_{m+1}^m+C_{m+2}^m+...+C_n^m) \\
+&= m * (C_{m+2}^{m+1}+C_{m+2}^m+...+C_n^m) \\
+&= m * C_{n+1}^{m+1} \\
+&= m * C_{n+1}^{m+1}
+\end{align}
+$$ 
+
+$$
+\begin{align}
+ans &= \frac{m * C_{n+1}^{m+1}}{C_n^m} \\
+&= \frac{m*(n+1)}{m+1}
+\end{align}
+$$ 
+
 
 > 辣鸡Windows测评机
 
