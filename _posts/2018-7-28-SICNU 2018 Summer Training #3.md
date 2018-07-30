@@ -85,9 +85,9 @@ int main()
 排名先按照题数排序，相同的题数按照罚时排序，相同的罚时按照序号排序
 
 ### 分析
-第1个人过题后，排名会上涨，其他人过题的时候，如果过题的那个人之前排名比第1个人低，过题后比第1个人高，那么排名会减一
+第1个人过题后，排名会上涨，其他人过题的时候，如果过题的那个人之前排名比第1个人低，过题后比第1个人高，那么排名会减1
 
-维护一个优先队列（优先弹出排名低的）来存比第一个人排名高的人。然后如果第一个人过题了，就依次和队列里面的数比较，如果排名比队列里面的人高，就出队。如果其他人过题了，过题前排名比第一个人低，过题后比第一人个排名高，排名--
+维护一个优先队列（优先弹出排名低的）来存比第一个人排名高的人。然后如果第一个人过题了，就依次和队列里面的数比较，如果排名比队列里面的人高，就出队。如果其他人过题了，过题前排名比第一个人低，过题后比第一人个排名高，排名减1
 
 ### 代码
 
@@ -190,9 +190,9 @@ int main()
 给一颗树，每次删除节点编号最小的叶子，然后记录删除的叶子的邻接节点。通过记录的节点来计算树的邻接表
 
 ### 分析
-可以通过每条记录，得到每个节点的邻接节点个数，用d[i]保存，然后遍历每条记录，从d[i]==1中找到编号最小的节点j，删除该节点（d[i]-=1,d[j]-=1)，模拟一下就好了。
+可以通过每条记录，得到每个节点的邻接节点个数，用$d[i]$保存，然后遍历每条记录，从d[i]==1中找到编号最小的节点j，删除该节点（$d[i]-=1,d[j]-=1$)，模拟一下就好了。
 
-可以通过优先队列来记录d[i]等于1的节点（代码里面写的0），注意输入格式
+可以通过优先队列来记录$d[i]$等于$1$的节点（代码里面写的$0$），注意输入格式
 
 ### 代码
 
@@ -259,10 +259,10 @@ int main()
 ### 题目大意
 [题目链接](https://vjudge.net/contest/238810#problem/G)
 
-输入两个矩形，面积分别是s1, s2 输出 $(s1 \cap s2) / (s1 \cup s2)$
+输入两个矩形，面积分别是$s1$, $s2$ 输出 $(s1 \cap s2) / (s1 \cup s2)$
 
 ### 分析
-签到题，算出重合的面积就行了，注意输出格式，没有面积输出“0.00”
+签到题，算出重合的面积就行了，注意输出格式，没有面积输出“$0.00$”
 
 ### 代码
 
@@ -322,10 +322,10 @@ int main()
 ### 题目大意
 [题目链接](https://vjudge.net/contest/238810#problem/H)
 
-模拟6种操作，def,add,sub,mul,div,mod
+模拟6种操作，$def,add,sub,mul,div,mod$
 
 ### 分析
-用map直接模拟就行了，注意mul的时候，直接乘会炸longlong，把乘法转化成多次相加就行了
+用$map$直接模拟就行了，注意$mul$的时候，直接乘会炸$long long$，把乘法转化成多次相加就行了
 
 ### 代码
 
@@ -490,16 +490,124 @@ int main()
 ### 题目大意
 [题目链接](https://vjudge.net/contest/238810#problem/I)
 
-n个点m条边，xzz从第1走到n，每条边需要花费
+n个点m条边，每条边需要花费时间，每个点有红绿灯，红灯的时候不能走。求xzz从点1走到点n需要的最短时间
 
 ### 分析
-
-
+单源最短路，直接用dijkstra跑就行了，更新的时候需要加上等红灯的时间
 
 > 辣鸡Windows测评机
 
 ### 代码
 
 ```clike
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <cstring>
+#include <queue>
+using namespace std;
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define clr(a, x) memset(a, x, sizeof(a))
+#define pb push_back
+#define mp make_pair
+#define INF 0x3f3f3f3f
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll MOD = 1e9+7;
+const int maxn = 1e3 + 5;
+// head
 
+int a[maxn];
+
+/*
+* 复杂度O(ElogE)
+* 注意对vector<Edge>E[maxn]进行初始化后加边
+*/
+struct qnode
+{
+    int v, c;
+    qnode(int _v = 0, int _c = 0): v(_v), c(_c) {}
+    bool operator <(const qnode &r) const
+    {
+        return c > r.c;
+    }
+};
+struct Edge
+{
+    int v, cost;
+    Edge(int _v = 0, int _cost = 0): v(_v), cost(_cost) {}
+};
+vector<Edge>E[maxn];
+bool vis[maxn];
+int dist[maxn];
+void Dijkstra(int n, int start) //点的编号从1开始
+{
+    memset(vis, false, sizeof(vis));
+    for(int i = 1; i <= n; i++)dist[i] = INF;
+    priority_queue<qnode>que;
+    while(!que.empty())que.pop();
+    dist[start] = 0;
+    que.push(qnode(start, 0));
+    qnode tmp;
+    while(!que.empty())
+    {
+        tmp = que.top();
+        que.pop();
+        int u = tmp.v;
+        if(vis[u])continue;
+        vis[u] = true;
+        for(int i = 0; i < E[u].size(); i++)
+        {
+            int v = E[tmp.v][i].v;
+            int cost = E[u][i].cost;
+            int deng;
+            if(dist[u] % (a[u]*2) < a[u])
+                deng = 0;
+            else
+                deng = a[u]*2-dist[u] % (a[u]*2);
+            if(!vis[v] && dist[v] > dist[u] + cost+deng)
+            {
+                dist[v] = dist[u] + cost+deng;
+                que.push(qnode(v, dist[v]));
+            }
+        }
+    }
+}
+void addedge(int u, int v, int w)
+{
+    E[u].push_back(Edge(v, w));
+}
+
+int main() 
+{
+#ifndef ONLINE_JUDGE
+    // freopen("in.txt", "r", stdin);
+#endif
+
+    int T;
+    scanf("%d", &T);
+    while(T--)
+    {
+        int n, m;
+        scanf("%d%d", &n, &m);
+        rep(i,1,n+1)
+        {
+            scanf("%d", &a[i]);
+            E[i].clear();
+        }
+        while(m--)
+        {
+            int u, v, val;
+            scanf("%d%d%d", &u, &v, &val);
+            addedge(u,v,val);
+            addedge(v,u,val);
+        }
+        int s, t;
+        scanf("%d%d", &s, &t);
+        Dijkstra(n,s);
+        printf("%d\n", dist[t]);
+    }
+    return 0;
+}
 ```
