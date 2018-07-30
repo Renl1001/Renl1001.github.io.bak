@@ -424,7 +424,7 @@ int main()
 
 ### 分析
 m个礼物送给最大编号的人的编号是i的个数有：$C_{i-1}^{m-1}$,所以可以得到期望的公式
-$$ ans &= \frac{\sum_{i=m}^{n}i*{C_{i-1}^{m-1}}}{C_n^m} $$
+$$ ans = \frac{\sum_{i=m}^{n}i*{C_{i-1}^{m-1}}}{C_n^m} $$
 
 $$
 \begin{align}
@@ -439,12 +439,7 @@ $$
 \end{align}
 $$ 
 
-$$
-\begin{align}
-ans &= \frac{m * C_{n+1}^{m+1}}{C_n^m} \\
-&= \frac{m*(n+1)}{m+1}
-\end{align}
-$$ 
+$ ans = \frac{m * C_{n+1}^{m+1}}{C_n^m} = \frac{m*(n+1)}{m+1} $ 
 
 
 > 辣鸡Windows测评机
@@ -489,4 +484,22 @@ int main()
     }
     return 0;
 }
+```
+
+## I题
+### 题目大意
+[题目链接](https://vjudge.net/contest/238810#problem/I)
+
+n个点m条边，xzz从第1走到n，每条边需要花费
+
+### 分析
+
+
+
+> 辣鸡Windows测评机
+
+### 代码
+
+```clike
+
 ```
