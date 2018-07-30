@@ -254,3 +254,84 @@ int main()
 }
 
 ```
+
+## D题
+### 题目大意
+[题目链接](https://vjudge.net/contest/238810#problem/D)
+
+输入两个矩形，面积分别是s1,s2 输出 
+
+### 分析
+可以通过每条记录，得到每个节点的邻接节点个数，用d[i]保存，然后遍历每条记录，从d[i]==1中找到编号最小的节点j，删除该节点（d[i]--,d[j]--)，模拟一下就好了。
+
+可以通过优先队列来记录d[i]等于1的节点（代码里面写的0），注意输入格式
+
+### 代码
+
+```clike
+#include <iostream>
+#include <cstdio>
+#include <queue>
+#include <vector>
+#include <algorithm>
+using namespace std;
+const int N = 8000;
+vector<int> v, edge[8000];
+int in[N];
+struct cmp
+{
+    bool operator () (int &a, int &b)
+    {
+        return a > b;
+    }
+};
+
+int main()
+{
+    int n = 0, k, i, j;
+    priority_queue<int, vector<int>, cmp>q;
+    for(i = 1; i < N; i++)in[i] = 1;
+    int a;
+    while(~scanf("%d", &a))
+    {
+        v.push_back(a);
+        in[a]++;
+    }
+    n = v.size()+1;
+    in[n]--;
+    for(i = 1; i <= n; i++)
+    {
+        if(in[i] == 1)
+        {
+            q.push(i);
+        }
+    }
+    int f, leaf;
+    for(i = 0; i < v.size(); i++)
+    {
+        f = v[i];
+        leaf = q.top();
+        q.pop();
+        edge[f].push_back(leaf);
+        edge[leaf].push_back(f);
+
+        in[f]--;
+        if(in[f] == 1)
+        {
+            q.push(f);
+        }
+    }
+    for(i = 1; i <= n; i++)
+    {
+        printf("%d:", i);
+        sort(edge[i].begin(), edge[i].end());
+        for(j = 0; j < edge[i].size(); j++)
+        {
+            printf(" %d", edge[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
+
+```
