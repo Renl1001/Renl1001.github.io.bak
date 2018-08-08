@@ -432,3 +432,133 @@ int main()
 }
 ```
 
+## I题
+### 题目大意
+[题目链接](https://cn.vjudge.net/contest/243410#problem/I)
+
+两个人在一颗无根树上面抓另外一个人，被抓的人知道两个人的路线，问那两个人能否抓到
+
+### 分析
+如果只有一个人，要抓到犯人，就需要树是一条链，那么两个人的时候，只需要某个人守住某个点，除掉这个点以外的每个子树都是一条链就能够抓到。
+
+可以依次删掉每个度数小于等于2的叶子节点，最后会剩下的节点如果是一条链，就能够抓到
+
+### 代码
+
+```clike
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define clr(a, x) memset(a, x, sizeof(a))
+#define pb push_back
+#define mp make_pair
+#define INF 0x3f3f3f3f
+typedef vector<int> VI;
+typedef long long ll;
+typedef pair<int,int> PII;
+const ll MOD = 1e9+7;
+const int maxn = 2e5 + 5;
+// head
+
+VI vi[maxn];
+int in[maxn], vis[maxn];
+
+void dfs(int u)
+{
+    if(vis[u] || vi[u].size() > 2) return;
+    vis[u] = 1;
+    rep(i, 0, vi[u].size()) 
+    {
+        in[vi[u][i]]--;
+        dfs(vi[u][i]);    
+    }
+}
+
+int main() 
+{
+#ifndef ONLINE_JUDGE
+    freopen("in.txt", "r", stdin);
+#endif
+
+    int n, u, v;
+    cin >> n;
+    rep(i, 1, n)
+    {
+        scanf("%d%d", &u, &v);
+        vi[u].pb(v), vi[v].pb(u);
+        in[u]++, in[v]++;
+    }
+    rep(i, 1, n+1) if(vi[i].size() == 1) dfs(i);
+    bool flag = 0;
+    rep(i, 1, n+1) if(!vis[i] && in[i] > 2) flag = 1;
+    if(!flag) printf("YES\n");
+    else printf("NO\n");
+    return 0;
+}
+```
+
+## J题
+### 题目大意
+[题目链接](https://cn.vjudge.net/contest/243410#problem/J)
+
+n个人玩杀人游戏，死了不能复活，最后得到每个人杀人的数，问这个杀人数是否是真实的，并且按照时间顺序打印杀人记录
+
+### 分析
+累加和如果大于n-1的话就表示这个杀人数是假的，然后每次选择一个杀人数不为零的杀掉一个杀人数为0的人打印出来
+
+### 代码
+
+```clike
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,a,n) for (int i=a;i<n;i++)
+#define pb push_back
+#define mp make_pair
+#define INF 0x3f3f3f3f
+typedef long long ll;
+typedef pair<int,int> PII;
+const int maxn = 2e5 + 5;
+// head
+
+int a[maxn];
+vector<PII> ans;
+
+int main() 
+{
+    int n;
+    cin >> n;
+    ll sum = 0;
+    rep(i, 1, n+1)
+    {
+        scanf("%d", &a[i]);
+        sum += a[i];
+    }
+    if(sum > n-1) printf("NO\n");
+    else
+    {
+        int l = n, r = n;
+        for(l = n; l >= 1; l--) if(a[l] != 0) break;
+        int flag = 0;
+        while(sum--)
+        {
+            ans.pb(mp(l,r));
+            a[l]--;
+            if(a[l] == 0) l--;
+            r--;
+            if(a[r] != 0)
+            {
+                flag = 1;
+                break;
+            }
+        }
+        if(flag) printf("NO\n");
+        else
+        {
+            printf("YES\n");
+            rep(i,0,ans.size())
+                printf("%d %d\n", ans[i].first, ans[i].second);
+        }
+    }
+    return 0;
+}
+```
