@@ -2,7 +2,6 @@
 layout: post
 title: '小a与星际探索'
 date: 2019-01-24
-categories: ACM
 tags: 背包
 ---
 
